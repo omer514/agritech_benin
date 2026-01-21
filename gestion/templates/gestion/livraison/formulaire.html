@@ -1,0 +1,59 @@
+{% extends "gestion/base.html" %}
+
+{% block header %}Nouvel Ordre de Sortie{% endblock %}
+{% block breadcrumb %}Livraison / Création{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                        <i class="bi bi-truck fs-3 text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold">Détails de l'expédition</h4>
+                        <p class="text-muted small mb-0">Remplissez les informations pour le magasinier.</p>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Entreprise Cliente</label>
+                        {{ form.client }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Entrepôt Source</label>
+                            {{ form.entrepot_source }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Produit / Culture</label>
+                            {{ form.type_culture }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Quantité à livrer (kg)</label>
+                        <div class="input-group">
+                            {{ form.quantite }}
+                            <span class="input-group-text bg-light">kg</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3">
+                            <i class="bi bi-send-check me-2"></i> Envoyer l'ordre au magasinier
+                        </button>
+                        <a href="{% url 'liste_livraisons' %}" class="btn btn-link text-muted mt-2">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

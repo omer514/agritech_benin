@@ -1,0 +1,275 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Tableau de Bord{% endblock %}
+{% block header %}
+<div class="d-flex justify-content-between align-items-center w-100">
+    <span class="fs-4 fw-semibold text-dark">Vue d'ensemble Coopérative</span>
+    <a href="/admin/" target="_blank" class="btn btn-dark shadow-sm rounded-pill px-4 py-2">
+        <i class="bi bi-shield-lock me-2"></i> Accès Admin Django
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <div class="card border-0 shadow p-3 bg-light" style="border-left: 4px solid #0d6efd;">
+        <div class="d-flex align-items-center">
+            <div class="rounded-circle p-2 me-3" style="background-color: rgba(13, 110, 253, 0.1);">
+                <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+            </div>
+            <div class="flex-grow-1">
+                <strong class="text-dark">Mode Super-Utilisateur :</strong> 
+                <span class="text-muted">Vous avez accès à la base de données brute via le bouton noir "Accès Admin Django" ci-dessus.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white p-4 shadow border-0 h-100 position-relative" style="border-radius: 12px;">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="opacity-85 mb-0">Total Récoltes</h6>
+                <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.2);">
+                    <i class="bi bi-basket3 fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size: 2.2rem;">{{ total_recoltes }} kg</h2>
+            <div class="position-absolute bottom-0 start-0 end-0 p-3">
+                <div class="progress" style="height: 4px; background-color: rgba(255, 255, 255, 0.2);">
+                    <div class="progress-bar bg-white" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white p-4 shadow border-0 h-100 position-relative" style="border-radius: 12px;">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="opacity-85 mb-0">Producteurs Actifs</h6>
+                <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.2);">
+                    <i class="bi bi-people fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size: 2.2rem;">{{ total_producteurs }}</h2>
+            <div class="position-absolute bottom-0 start-0 end-0 p-3">
+                <div class="progress" style="height: 4px; background-color: rgba(255, 255, 255, 0.2);">
+                    <div class="progress-bar bg-white" style="width: 60%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark p-4 shadow border-0 h-100 position-relative" style="border-radius: 12px;">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="opacity-85 mb-0">Zones Couvertes</h6>
+                <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; background-color: rgba(0, 0, 0, 0.1);">
+                    <i class="bi bi-geo-alt fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size: 2.2rem;">{{ total_zones }}</h2>
+            <div class="position-absolute bottom-0 start-0 end-0 p-3">
+                <div class="progress" style="height: 4px; background-color: rgba(0, 0, 0, 0.1);">
+                    <div class="progress-bar bg-dark" style="width: 85%; opacity: 0.5;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-danger text-white p-4 shadow border-0 h-100 position-relative" style="border-radius: 12px;">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="opacity-85 mb-0">Alertes Stock</h6>
+                <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.2);">
+                    <i class="bi bi-exclamation-triangle fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size: 2.2rem;">{{ alertes_count }}</h2>
+            <div class="position-absolute bottom-0 start-0 end-0 p-3">
+                <div class="progress" style="height: 4px; background-color: rgba(255, 255, 255, 0.2);">
+                    <div class="progress-bar bg-white" style="width: {% if alertes_count > 0 %}90{% else %}10{% endif %}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow border-0" style="border-radius: 12px;">
+            <div class="card-header bg-white border-0 py-3" style="border-radius: 12px 12px 0 0;">
+                <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                         style="width: 32px; height: 32px; background-color: rgba(13, 110, 253, 0.1);">
+                        <i class="bi bi-house-gear text-primary"></i>
+                    </div>
+                    État des Entrepôts par Zone
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4 py-3 border-top-0 fw-semibold">Entrepôt</th>
+                                <th class="py-3 border-top-0 fw-semibold">Zone</th>
+                                <th class="py-3 border-top-0 fw-semibold" style="width: 30%;">Niveau de Stock</th>
+                                <th class="py-3 border-top-0 fw-semibold">Statut</th>
+                                <th class="pe-4 py-3 border-top-0 fw-semibold text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in entrepots %}
+                            <tr class="border-bottom">
+                                <td class="ps-4 py-3 fw-bold">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 32px; height: 32px; background-color: rgba(13, 110, 253, 0.1);">
+                                            <i class="bi bi-building text-primary"></i>
+                                        </div>
+                                        {{ e.nom }}
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="badge bg-light text-dark border py-2 px-3">{{ e.zone }}</span>
+                                </td>
+                                <td class="py-3">
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-muted">Stock actuel</small>
+                                            <small class="fw-semibold">{{ e.stock_actuel }} / {{ e.capacite_max }} kg</small>
+                                        </div>
+                                        <div class="progress" style="height: 8px; border-radius: 4px;">
+                                            <div class="progress-bar {% if e.est_en_alerte %}bg-danger{% else %}bg-success{% endif %}" 
+                                                 role="progressbar"
+                                                 style="width: {% widthratio e.stock_actuel e.capacite_max 100 %}%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    {% if e.est_en_alerte %}
+                                    <span class="badge rounded-pill bg-danger py-2 px-3 d-inline-flex align-items-center">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> CRITIQUE
+                                    </span>
+                                    {% else %}
+                                    <span class="badge rounded-pill bg-success py-2 px-3 d-inline-flex align-items-center">
+                                        <i class="bi bi-check-circle-fill me-1"></i> STABLE
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td class="pe-4 py-3 text-end">
+                                    <a href="{% url 'detail_entrepot_admin' e.id %}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
+                                        <i class="bi bi-eye-fill me-1"></i> Voir Détails
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styles pour embellir l'interface */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(0,0,0,0.02);
+    }
+    
+    .progress-bar {
+        transition: width 1s ease;
+    }
+    
+    .badge {
+        transition: transform 0.2s ease;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Animation pour les cartes de statistiques */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .row.g-4 > div {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+    
+    .row.g-4 > div:nth-child(1) { animation-delay: 0.1s; opacity: 0; }
+    .row.g-4 > div:nth-child(2) { animation-delay: 0.2s; opacity: 0; }
+    .row.g-4 > div:nth-child(3) { animation-delay: 0.3s; opacity: 0; }
+    .row.g-4 > div:nth-child(4) { animation-delay: 0.4s; opacity: 0; }
+    
+    /* Styles pour les barres de progression du tableau */
+    .progress {
+        overflow: hidden;
+    }
+    
+    /* Effet de brillance sur les cartes */
+    .card.bg-primary::before,
+    .card.bg-success::before,
+    .card.bg-danger::before,
+    .card.bg-warning::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+    
+    /* Effet de survol sur les icônes */
+    .rounded-circle {
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    
+    .card:hover .rounded-circle {
+        transform: scale(1.1);
+    }
+    
+    /* Style pour les en-têtes du tableau */
+    .table-light th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+</style>
+{% endblock %}

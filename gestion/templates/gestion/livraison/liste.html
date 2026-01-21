@@ -1,0 +1,70 @@
+{% extends "gestion/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Gestion des Livraisons & Sorties</h2>
+        {% if user.is_superuser %}
+        <a href="{% url 'creer_livraison' %}" class="btn btn-primary rounded-pill">
+            <i class="bi bi-plus-lg"></i> Nouvel Ordre de Sortie
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Date Ordre</th>
+                        <th>Client</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Entrepôt</th>
+                        <th>Statut</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in livraisons %}
+                    <tr>
+                        <td>{{ l.date_creation|date:"d/m/Y H:i" }}</td>
+                        <td><span class="fw-bold">{{ l.client }}</span></td>
+                        <td>{{ l.type_culture.nom }}</td>
+                        <td><span class="badge bg-info text-dark">{{ l.quantite }} kg</span></td>
+                        <td>{{ l.entrepot_source.nom }}</td>
+                        <td>
+                            {% if l.statut == 'PROGRAMME' %}
+                                <span class="badge bg-warning-subtle text-warning border border-warning px-3">En attente</span>
+                            {% elif l.statut == 'EXPEDIE' %}
+                                <span class="badge bg-success-subtle text-success border border-success px-3">Sortie effectuée</span>
+                            {% else %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger px-3">Annulé</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            {% if l.statut == 'PROGRAMME' and user.is_staff %}
+                                <form action="{% url 'confirmer_expedition' l.id %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm rounded-pill px-3">
+                                        <i class="bi bi-truck me-1"></i> Confirmer le départ
+                                    </button>
+                                </form>
+                            {% endif %}
+                            
+                            {% if l.statut == 'EXPEDIE' %}
+                                <small class="text-muted">Sorti par {{ l.confirme_par.username }}</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">Aucun ordre de livraison enregistré.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

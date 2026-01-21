@@ -1,0 +1,43 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Ajouter une Culture{% endblock %}
+{% block header %}Nouvelle Culture{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-success text-white rounded-circle p-2 me-3">
+                        <i class="bi bi-plus-lg fs-4"></i>
+                    </div>
+                    <h5 class="card-title fw-bold mb-0">Enregistrer un nouveau produit</h5>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted">Nom de la culture</label>
+                        {{ form.nom }}
+                        {% if form.nom.errors %}
+                            <div class="text-danger small mt-1">{{ form.nom.errors }}</div>
+                        {% endif %}
+                        <div class="form-text mt-2">
+                            Exemple : Maïs, Soja, Coton, Ananas...
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'liste_cultures' %}" class="btn btn-light rounded-pill px-4">Annuler</a>
+                        <button type="submit" class="btn btn-success rounded-pill px-4">
+                            <i class="bi bi-check-lg me-2"></i>Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

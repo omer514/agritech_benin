@@ -1,0 +1,393 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Mon Espace Producteur{% endblock %}
+{% block header %}
+<div class="d-flex justify-content-between align-items-center w-100">
+    <span class="fs-4 fw-semibold text-dark d-none d-md-block">Tableau de Bord Producteur</span>
+    <span class="fs-5 fw-semibold text-dark d-md-none">Tableau de Bord</span>
+    <div class="d-flex align-items-center">
+        <div class="me-2 p-2 rounded-circle" style="background-color: rgba(25, 135, 84, 0.1);">
+            <i class="bi bi-person-circle text-success"></i>
+        </div>
+        <span class="text-muted d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row g-3 g-md-4 mb-3 mb-md-4">
+    <div class="col-12 col-md-8">
+        <div class="card shadow-sm border-0 h-100" style="border-radius: 12px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+            <div class="card-body p-3 p-md-4 p-lg-5">
+                <div class="d-flex align-items-center h-100">
+                    <div class="flex-grow-1">
+                        <div class="mb-3 mb-md-4">
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 mb-2 mb-md-3 d-inline-block">
+                                <i class="bi bi-arrow-up-right-circle me-1 me-md-2"></i>Producteur Actif
+                            </span>
+                            <h1 class="fw-bold text-dark mb-2" style="font-size: clamp(1.8rem, 5vw, 2.5rem);">
+                                Bonjour, {{ user.first_name|default:user.username }} !
+                            </h1>
+                            <p class="text-muted mb-3 mb-md-4" style="font-size: clamp(0.9rem, 2.5vw, 1.1rem);">
+                                Gérez vos récoltes et suivez vos livraisons en temps réel.
+                            </p>
+                        </div>
+                        <a href="{% url 'declarer_recolte' %}" 
+                           class="btn btn-success rounded-pill w-100 w-md-auto px-4 px-md-5 py-3 fs-6 fs-md-5 shadow-sm d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-plus-circle me-2 me-md-3 fs-5 fs-md-4"></i> 
+                            <span>Déclarer une nouvelle récolte</span>
+                        </a>
+                    </div>
+                    <div class="d-none d-lg-block ms-3 ms-md-4">
+                        <div class="position-relative">
+                            <div class="rounded-circle p-3 p-md-4" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.2) 100%);">
+                                <i class="bi bi-sun text-warning" style="font-size: clamp(3rem, 8vw, 6rem);"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 h-100" style="border-radius: 12px; background: linear-gradient(135deg, #198754 0%, #157347 100%);">
+            <div class="card-body p-3 p-md-4 p-lg-5 d-flex flex-column">
+                <div class="mb-2 mb-md-3">
+                    <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-2 mb-2 mb-md-3 d-inline-block">
+                        <i class="bi bi-check-circle me-1 me-md-2"></i>Validé
+                    </span>
+                    <h6 class="text-uppercase small fw-bold opacity-85 mb-0">Total livré</h6>
+                </div>
+                <div class="my-auto">
+                    <h1 class="fw-bold mb-0 text-white text-center text-md-start" 
+                        style="font-size: clamp(2.5rem, 8vw, 3.5rem);">
+                        {{ total_livre }} <small class="opacity-75" style="font-size: 0.5em;">kg</small>
+                    </h1>
+                </div>
+                <div class="mt-3 mt-md-4 text-center">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center p-2 p-md-3" 
+                         style="background-color: rgba(255, 255, 255, 0.1);">
+                        <i class="bi bi-truck text-white" style="font-size: clamp(1.5rem, 4vw, 2.5rem);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mt-2 mt-md-3">
+        <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+            <div class="card-header bg-white border-0 py-3 py-md-4 px-3 px-md-4 px-lg-5">
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                    <div class="d-flex align-items-center mb-2 mb-md-0">
+                        <div class="rounded-circle p-2 me-2 me-md-3" style="background-color: rgba(25, 135, 84, 0.1);">
+                            <i class="bi bi-clock-history text-success fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0 text-dark" style="font-size: clamp(1.1rem, 3vw, 1.25rem);">
+                                Mes dernières déclarations
+                            </h5>
+                            <p class="text-muted small mb-0 d-none d-md-block">Historique de vos récoltes récentes</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center w-100 w-md-auto justify-content-between justify-content-md-start">
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 me-2">
+                            {{ recoltes|length }} récolte{{ recoltes|pluralize }}
+                        </span>
+                        <a href="{% url 'liste_recoltes' %}" 
+                           class="btn btn-outline-secondary rounded-pill px-3 px-md-4 py-2 d-inline-flex align-items-center">
+                            <i class="bi bi-clock-history me-1 me-md-2"></i>
+                            <span class="d-none d-md-inline">Voir l'historique</span>
+                            <span class="d-md-none">Historique</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light d-none d-md-table-header-group">
+                            <tr>
+                                <th class="ps-4 ps-md-5 py-3 py-md-4 border-top-0 fw-semibold">Date</th>
+                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Type de Culture</th>
+                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Quantité</th>
+                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Entrepôt</th>
+                                <th class="pe-4 pe-md-5 py-3 py-md-4 border-top-0 fw-semibold text-end">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in recoltes %}
+                            <tr class="border-bottom">
+                                <td class="ps-3 ps-md-5 py-3 py-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3" 
+                                             style="width: 36px; height: 36px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-calendar text-muted"></i>
+                                        </div>
+                                        <div>
+                                            <span class="fw-medium d-block">{{ r.date_recolte|date:"d/m/Y" }}</span>
+                                            <small class="text-muted d-none d-md-block">Date de récolte</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3 py-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3" 
+                                             style="width: 36px; height: 36px; background-color: rgba(25, 135, 84, 0.1);">
+                                            <i class="bi bi-tree text-success"></i>
+                                        </div>
+                                        <span class="fw-bold text-success">{{ r.type_culture }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 py-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 d-none d-md-flex" 
+                                             style="width: 36px; height: 36px; background-color: rgba(13, 110, 253, 0.1);">
+                                            <i class="bi bi-scale text-primary"></i>
+                                        </div>
+                                        <span class="fw-bold">{{ r.quantite }} kg</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 py-md-4 d-none d-md-table-cell">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                             style="width: 36px; height: 36px; background-color: rgba(255, 193, 7, 0.1);">
+                                            <i class="bi bi-building text-warning"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ r.entrepot_destination.nom }}</span>
+                                    </div>
+                                </td>
+                                <td class="pe-3 pe-md-5 py-3 py-md-4 text-end">
+                                    {% if r.statut == 'EN_ATTENTE' %}
+                                    <span class="badge rounded-pill py-2 px-3 d-inline-flex align-items-center" 
+                                          style="background-color: rgba(255, 193, 7, 0.1); color: #664d03;">
+                                        <i class="bi bi-clock-history me-1 me-md-2"></i>
+                                        <span class="d-none d-md-inline">En cours</span>
+                                        <span class="d-md-none">Attente</span>
+                                    </span>
+                                    {% else %}
+                                    <span class="badge rounded-pill py-2 px-3 d-inline-flex align-items-center" 
+                                          style="background-color: rgba(25, 135, 84, 0.1); color: #0f5132;">
+                                        <i class="bi bi-check-circle-fill me-1 me-md-2"></i>
+                                        <span class="d-none d-md-inline">Réceptionné</span>
+                                        <span class="d-md-none">Validé</span>
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 py-md-5">
+                                    <div class="py-3 py-md-5">
+                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mb-md-4" 
+                                             style="width: 60px; height: 60px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-inbox text-muted"></i>
+                                        </div>
+                                        <h5 class="text-muted mb-2 mb-md-3" style="font-size: clamp(1rem, 3vw, 1.25rem);">
+                                            Aucune récolte déclarée
+                                        </h5>
+                                        <p class="text-muted mb-3 mb-md-4">Commencez par déclarer votre première récolte</p>
+                                        <a href="{% url 'declarer_recolte' %}" 
+                                           class="btn btn-success rounded-pill px-4 py-2 d-inline-flex align-items-center">
+                                            <i class="bi bi-plus-circle me-2"></i> 
+                                            <span>Déclarer une récolte</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styles pour embellir l'interface */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn-success {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(25, 135, 84, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+        /* Ajustements pour mobile */
+        .card-body {
+            padding: 1.5rem !important;
+        }
+        
+        .btn-success, .btn-outline-secondary {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .table-responsive {
+            border-radius: 0;
+            margin: 0 -1rem;
+            width: calc(100% + 2rem);
+        }
+        
+        /* Amélioration de la lisibilité sur mobile */
+        body {
+            font-size: 14px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.3;
+        }
+        
+        /* Padding réduit sur mobile */
+        .px-md-5, .ps-md-5, .pe-md-5 {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* Taille des icônes adaptée */
+        .rounded-circle i {
+            font-size: 1.2rem !important;
+        }
+        
+        /* Boutons plus grands pour le tactile */
+        .btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    
+    /* Animation d'entrée pour les éléments */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .col-md-8, .col-md-4 {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    .col-12 {
+        animation: fadeInUp 0.8s ease forwards;
+        animation-delay: 0.2s;
+        opacity: 0;
+    }
+    
+    /* Effets de survol sur les lignes du tableau */
+    .table-hover tbody tr {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(25, 135, 84, 0.02);
+        transform: translateX(5px);
+        box-shadow: inset 4px 0 0 #198754;
+    }
+    
+    /* Animation des icônes */
+    .rounded-circle {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover .rounded-circle:not(.d-inline-flex) {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .table-hover tbody tr:hover .rounded-circle {
+        transform: scale(1.1);
+        background-color: rgba(25, 135, 84, 0.2) !important;
+    }
+    
+    /* Style pour les badges */
+    .badge {
+        transition: all 0.3s ease;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Animation pulsante pour le total livré */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+        100% { transform: scale(1); }
+    }
+    
+    .col-md-4 .card h1 {
+        animation: pulse 3s infinite ease-in-out;
+    }
+    
+    /* Style pour les en-têtes de tableau */
+    .table-light th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #e9ecef;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+    
+    /* Media queries supplémentaires */
+    @media (max-width: 576px) {
+        /* Encore plus spécifique pour petits mobiles */
+        .d-flex.flex-column.flex-md-row {
+            flex-direction: column !important;
+        }
+        
+        .w-100.w-md-auto {
+            width: 100% !important;
+        }
+        
+        .justify-content-between.justify-content-md-start {
+            justify-content: space-between !important;
+        }
+        
+        /* Masquer certaines colonnes sur très petits écrans */
+        .d-none.d-md-table-cell {
+            display: none !important;
+        }
+        
+        /* Réduire encore les paddings */
+        .card-body {
+            padding: 1rem !important;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 992px) {
+        /* Tablettes */
+        .card-body {
+            padding: 2rem !important;
+        }
+        
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+    }
+</style>
+{% endblock %}

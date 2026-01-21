@@ -1,0 +1,40 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Nouveau Magasinier{% endblock %}
+{% block header %}Inscrire un Magasinier{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-badge fs-1 text-primary"></i>
+                    <p class="text-muted">Le magasinier pourra gérer les stocks des entrepôts affectés.</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col">{{ form.first_name.label_tag }}{{ form.first_name }}</div>
+                        <div class="col">{{ form.last_name.label_tag }}{{ form.last_name }}</div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.username.label_tag }}{{ form.username }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}{{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.password.label_tag }}{{ form.password }}
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Créer le compte Magasinier</button>
+                        <a href="{% url 'liste_utilisateurs' %}" class="btn btn-light">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

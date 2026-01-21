@@ -1,0 +1,56 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Gestion des Entrepôts{% endblock %}
+{% block header %}Liste des Entrepôts{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-4">
+            <h5 class="fw-bold">Stockage par Zone</h5>
+            <a href="{% url 'ajouter_entrepot' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Ajouter Entrepôt</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom de l'Entrepôt</th>
+                        <th>Zone / Localité</th>
+                        <th>Responsable (Magasinier)</th>
+                        <th>Remplissage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in entrepots %}
+                    <tr>
+                        <td><strong>{{ e.nom }}</strong></td>
+                        <td>{{ e.zone }}</td>
+                        <td>
+                            {% if e.responsable %}
+                                <span class="badge bg-info text-dark"><i class="bi bi-person"></i> {{ e.responsable.get_full_name }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Non affecté</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 12px; width: 120px;">
+                                <div class="progress-bar {% if e.est_en_alerte %}bg-danger{% else %}bg-success{% endif %}" 
+                                     style="width: {{ e.taux_remplissage }}%"></div>
+                            </div>
+                            <small>{{ e.taux_remplissage|floatformat:0 }}%</small>
+                        </td>
+                        <td>
+                            <a href="{% url 'affecter_magasinier' e.id %}" class="btn btn-outline-primary btn-sm" title="Affecter un responsable">
+                                <i class="bi bi-person-plus"></i> Affecter
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

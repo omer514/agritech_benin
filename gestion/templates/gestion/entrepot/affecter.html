@@ -1,0 +1,35 @@
+{% extends "gestion/base.html" %}
+
+{% block header %}Affectation Magasinier{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-house-gear fs-1 text-success mb-3"></i>
+                <h4 class="fw-bold mb-4">Choisir un responsable pour : {{ entrepot.nom }}</h4>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4 text-start">
+                        <label class="form-label fw-bold">Sélectionner un magasinier actif :</label>
+                        <select name="magasinier_id" class="form-select form-select-lg">
+                            <option value="">---------</option>
+                            {% for m in magasiniers %}
+                                <option value="{{ m.id }}" {% if entrepot.responsable.id == m.id %}selected{% endif %}>
+                                    {{ m.get_full_name }} ({{ m.username }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Valider l'affectation</button>
+                        <a href="{% url 'liste_entrepots' %}" class="btn btn-light">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

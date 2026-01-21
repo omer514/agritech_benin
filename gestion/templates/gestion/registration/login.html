@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | AgriTech Bénin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --agri-dark: #1b4332;
+            --agri-primary: #2d6a4f;
+            --agri-secondary: #74c69d;
+            --agri-light: #d8f3dc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(116, 198, 157, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(45, 106, 79, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(27, 67, 50, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Login Container */
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(27, 67, 50, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+            padding: 40px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Brand Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--agri-primary), var(--agri-secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .brand-name {
+            color: var(--agri-dark);
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-tagline {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* Form Elements */
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: var(--agri-dark);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Form Controls */
+        .form-label {
+            color: var(--agri-dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: var(--agri-primary);
+            box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+            background: white;
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        /* Password toggle */
+        .input-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: var(--agri-primary);
+        }
+
+        /* Submit Button */
+        .btn-login {
+            background: linear-gradient(135deg, var(--agri-primary), var(--agri-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(45, 106, 79, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(45, 106, 79, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-login i {
+            margin-right: 10px;
+        }
+
+        /* Links */
+        .login-links {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .login-links a {
+            color: var(--agri-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 10px;
+        }
+
+        .login-links a:hover {
+            color: var(--agri-dark);
+        }
+
+        /* Error messages */
+        .alert {
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border: none;
+            font-weight: 500;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Back to home link */
+        .back-home {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 100;
+        }
+
+        .back-home a {
+            color: var(--agri-dark);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .back-home a:hover {
+            background: white;
+            transform: translateX(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Remember me checkbox */
+        .form-check-input:checked {
+            background-color: var(--agri-primary);
+            border-color: var(--agri-primary);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--agri-primary);
+            box-shadow: 0 0 0 0.25rem rgba(45, 106, 79, 0.25);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px 25px;
+                border-radius: 20px;
+            }
+            
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .brand-tagline {
+                font-size: 1rem;
+            }
+            
+            .back-home {
+                top: 20px;
+                left: 20px;
+            }
+            
+            .back-home a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .login-links {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .login-links a {
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
+            .login-card {
+                padding: 25px 20px;
+            }
+            
+            .brand-name {
+                font-size: 1.8rem;
+            }
+            
+            .brand-logo {
+                gap: 10px;
+            }
+            
+            .form-header h2 {
+                font-size: 1.6rem;
+            }
+            
+            .btn-login {
+                padding: 16px;
+                font-size: 1rem;
+            }
+            
+            .back-home a span {
+                display: none;
+            }
+            
+            .back-home a {
+                padding: 10px;
+                width: 40px;
+                height: 40px;
+                justify-content: center;
+            }
+        }
+
+        /* Animation for form elements */
+        .form-group {
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Helper text */
+        .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* Loading state for button */
+        .btn-login.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-login.loading::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Back to Home Link -->
+    <div class="back-home">
+        <a href="{% url 'landing' %}">
+            <i class="bi bi-arrow-left"></i>
+            <span>Retour à l'accueil</span>
+        </a>
+    </div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Brand Header -->
+            <div class="brand-header">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="bi bi-tree-fill"></i>
+                    </div>
+                    <div class="brand-name">AgriTech</div>
+                </div>
+                <p class="brand-tagline">Gestion Coopérative Intelligente</p>
+            </div>
+
+            <!-- Form Header -->
+            <div class="form-header">
+                <h2>Connexion</h2>
+                <p>Accédez à votre espace sécurisé</p>
+            </div>
+
+            <!-- Display Django messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" novalidate id="loginForm">
+                {% csrf_token %}
+                
+                <!-- Username Field -->
+                <div class="form-group mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-person"></i>
+                        Identifiant
+                    </label>
+                    <input type="text" 
+                           name="username" 
+                           class="form-control" 
+                           placeholder="Entrez votre nom d'utilisateur" 
+                           required
+                           autofocus
+                           autocomplete="username">
+                    <div class="form-text">Utilisez votre email ou votre identifiant unique</div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-key"></i>
+                        Mot de passe
+                    </label>
+                    <div class="input-group">
+                        <input type="password" 
+                               name="password" 
+                               id="passwordField"
+                               class="form-control" 
+                               placeholder="Votre mot de passe" 
+                               required
+                               autocomplete="current-password">
+                        <button type="button" 
+                                class="password-toggle" 
+                                onclick="togglePassword()">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-text">
+                        <a href="{% url 'password_reset' %}" class="text-decoration-none">
+                            <i class="bi bi-question-circle"></i>
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Error Display -->
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Identifiant ou mot de passe incorrect.
+                    </div>
+                {% endif %}
+
+                <!-- Remember Me -->
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
+                    <label class="form-check-label" for="rememberMe">
+                        Se souvenir de moi
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-login" id="submitBtn">
+                    <i class="bi bi-lock"></i>
+                    Se connecter
+                </button>
+            </form>
+
+            <!-- Additional Links -->
+            <div class="login-links">
+                <p class="mb-3 text-muted">Nouveau sur AgriTech ?</p>
+                <a href="#">
+                    <i class="bi bi-person-plus"></i>
+                    Demander un compte producteur
+                </a>
+                <a href="#">
+                    <i class="bi bi-telephone"></i>
+                    Contactez l'administrateur
+                </a>
+                <p class="mt-3 mb-0 small text-muted">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Votre connexion est sécurisée et chiffrée
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordField = document.getElementById('passwordField');
+            const toggleIcon = document.querySelector('.password-toggle i');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bi-eye');
+                toggleIcon.classList.add('bi-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bi-eye-slash');
+                toggleIcon.classList.add('bi-eye');
+            }
+        }
+
+        // Form validation and submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const username = this.querySelector('input[name="username"]');
+            const password = this.querySelector('input[name="password"]');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Remove previous error messages
+            const existingErrors = this.querySelectorAll('.is-invalid, .invalid-feedback');
+            existingErrors.forEach(el => el.remove());
+            
+            let isValid = true;
+            
+            // Validate username
+            if (!username.value.trim()) {
+                isValid = false;
+                username.classList.add('is-invalid');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback';
+                errorDiv.textContent = 'Veuillez entrer votre identifiant';
+                username.parentNode.appendChild(errorDiv);
+            }
+            
+            // Validate password
+            if (!password.value.trim()) {
+                isValid = false;
+                password.classList.add('is-invalid');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback';
+                errorDiv.textContent = 'Veuillez entrer votre mot de passe';
+                password.parentNode.appendChild(errorDiv);
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Focus on first invalid field
+                const firstInvalid = this.querySelector('.is-invalid');
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                }
+            } else {
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.innerHTML = '';
+                submitBtn.disabled = true;
+                
+                // The form will submit normally after this
+            }
+        });
+
+        // Remove invalid class on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+                const errorDiv = this.parentNode.querySelector('.invalid-feedback');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            });
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert.classList.contains('show')) {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            });
+            
+            // Auto-focus on username field
+            const usernameField = document.querySelector('input[name="username"]');
+            if (usernameField) {
+                usernameField.focus();
+            }
+        });
+
+        // Enter key to submit
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.target.matches('button, a, input[type="checkbox"]')) {
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn && !submitBtn.disabled) {
+                    submitBtn.click();
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

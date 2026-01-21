@@ -1,0 +1,53 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Nouvelle Récolte{% endblock %}
+{% block header %}Déclarer une Récolte{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white p-3">
+                <h5 class="mb-0"><i class="bi bi-patch-check"></i> Formulaire de dépôt</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-leaf"></i> Type de culture</label>
+                        {{ form.type_culture }}
+                        <small class="text-muted">Sélectionnez le produit que vous souhaitez livrer.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-scales"></i> Quantité estimée (kg)</label>
+                        <div class="input-group">
+                            {{ form.quantite }}
+                            <span class="input-group-text bg-light">kg</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-calendar-event"></i> Date de récolte</label>
+                        {{ form.date_recolte }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold"><i class="bi bi-house-down"></i> Entrepôt de destination</label>
+                        {{ form.entrepot_destination }}
+                        <small class="text-muted">Choisissez l'entrepôt le plus proche de votre zone.</small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                            <i class="bi bi-send-check"></i> Enregistrer la déclaration
+                        </button>
+                        <a href="{% url 'liste_recoltes' %}" class="btn btn-light">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

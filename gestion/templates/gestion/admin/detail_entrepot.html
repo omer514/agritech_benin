@@ -1,0 +1,107 @@
+{% extends "gestion/base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">{{ entrepot.nom }}</h2>
+            <p class="text-muted"><i class="bi bi-geo-alt"></i> {{ entrepot.zone }} | Responsable : {{ entrepot.responsable.get_full_name }}</p>
+        </div>
+        <a href="{% url 'liste_entrepots' %}" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-primary text-white p-3">
+                <small class="text-uppercase fw-bold opacity-75">Stock Total Actuel</small>
+                <h2 class="mb-0">{{ entrepot.stock_actuel }} kg</h2>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 p-3 h-100">
+                <small class="text-uppercase fw-bold text-muted mb-2">Taux d'occupation (Max: {{ entrepot.capacite_max }} kg)</small>
+                <div class="progress" style="height: 20px; border-radius: 10px;">
+                    <div class="progress-bar {% if entrepot.taux_remplissage > 90 %}bg-danger{% else %}bg-success{% endif %}" 
+                         style="width: {{ entrepot.taux_remplissage }}%">
+                        {{ entrepot.taux_remplissage|floatformat:1 }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 fw-bold">Répartition par Culture</div>
+                <div class="card-body">
+                    {% for item in inventaire %}
+                    <div class="d-flex align-items-center mb-3 p-3 border rounded">
+                        <div class="bg-light p-2 rounded me-3">
+                            <i class="bi bi-tag-fill text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 fw-bold">{{ item.culture }}</h6>
+                            <small class="text-muted">+{{ item.entrees }} kg / -{{ item.sorties }} kg</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-dark fs-6">{{ item.stock }} kg</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-muted">Aucun produit en stock.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 fw-bold">Derniers Mouvements</div>
+                <div class="card-body p-0">
+                    <ul class="nav nav-tabs border-0 px-3" id="stockTabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#in">Entrées</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#out">Sorties</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3">
+                        <div class="tab-pane fade show active" id="in">
+                            <table class="table table-sm">
+                                <thead><tr><th>Date</th><th>Culture</th><th>Quantité</th></tr></thead>
+                                <tbody>
+                                    {% for r in recoltes %}
+                                    <tr>
+                                        <td>{{ r.date_recolte|date:"d/m/Y" }}</td>
+                                        <td>{{ r.type_culture }}</td>
+                                        <td class="text-success fw-bold">+{{ r.quantite }} kg</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="out">
+                            <table class="table table-sm">
+                                <thead><tr><th>Date</th><th>Client</th><th>Quantité</th></tr></thead>
+                                <tbody>
+                                    {% for l in livraisons %}
+                                    <tr>
+                                        <td>{{ l.date_expedition|date:"d/m/Y" }}</td>
+                                        <td>{{ l.client }}</td>
+                                        <td class="text-danger fw-bold">-{{ l.quantite }} kg</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

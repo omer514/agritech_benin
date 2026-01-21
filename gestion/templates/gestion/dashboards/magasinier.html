@@ -1,0 +1,316 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Tableau de Bord Magasinier{% endblock %}
+{% block header %}
+<div class="d-flex justify-content-between align-items-center w-100">
+    <span class="fs-4 fw-semibold text-dark">Mon Espace Magasinier</span>
+    <div class="d-flex align-items-center">
+        <div class="me-3 p-2 rounded" style="background-color: rgba(13, 110, 253, 0.1);">
+            <i class="bi bi-box-seam text-primary"></i>
+        </div>
+        <span class="text-muted">Gestion des stocks et réceptions</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex align-items-center mb-3">
+            <div class="p-2 rounded-circle me-2" style="background-color: rgba(13, 110, 253, 0.1);">
+                <i class="bi bi-house-door text-primary"></i>
+            </div>
+            <h5 class="fw-bold mb-0">État de mes Entrepôts</h5>
+        </div>
+        <div class="row g-3">
+            {% for e in entrepots %}
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100" style="border-radius: 12px; border-left: 4px solid {% if e.est_en_alerte %}#dc3545{% else %}#198754{% endif %};">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h6 class="card-title fw-bold text-uppercase small text-muted mb-1">{{ e.nom }}</h6>
+                                <h3 class="fw-bold mb-0" style="font-size: 2rem;">
+                                    {{ e.stock_actuel }} 
+                                    <small class="fs-6 text-muted">/ {{ e.capacite_max }} kg</small>
+                                </h3>
+                            </div>
+                            <div class="p-2 rounded-circle" 
+                                 style="background-color: {% if e.est_en_alerte %}rgba(220, 53, 69, 0.1){% else %}rgba(25, 135, 84, 0.1){% endif %};">
+                                <i class="bi bi-building {% if e.est_en_alerte %}text-danger{% else %}text-success{% endif %}"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="small text-muted">Niveau de stock global</span>
+                                <span class="small fw-bold {% if e.est_en_alerte %}text-danger{% else %}text-success{% endif %}">
+                                    {{ e.taux_remplissage|floatformat:1 }}%
+                                </span>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 5px; overflow: hidden;">
+                                <div class="progress-bar {% if e.est_en_alerte %}bg-danger{% else %}bg-success{% endif %}" 
+                                     style="width: {{ e.taux_remplissage }}%">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3 pt-3 border-top text-center">
+                            <small class="text-muted">
+                                <i class="bi bi-{% if e.est_en_alerte %}exclamation-triangle text-danger{% else %}check-circle text-success{% endif %} me-1"></i>
+                                {% if e.est_en_alerte %}Stock critique{% else %}Stock stable{% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-4">
+        <div class="card shadow-sm border-0" style="border-radius: 12px;">
+            <div class="card-header bg-white border-0 py-3">
+                <div class="d-flex align-items-center">
+                    <div class="p-2 rounded-circle me-2" style="background-color: rgba(25, 135, 84, 0.1);">
+                        <i class="bi bi-list-check text-success"></i>
+                    </div>
+                    <h5 class="mb-0 fw-bold">Inventaire détaillé par culture</h5>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Culture</th>
+                                <th>Total Entrées (+)</th>
+                                <th>Total Sorties (-)</th>
+                                <th class="pe-4">Stock Disponible</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in entrepots %}
+                                {% for item in e.obtenir_inventaire_detaille %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">{{ item.culture }}</div>
+                                        <small class="text-muted">{{ e.nom }}</small>
+                                    </td>
+                                    <td class="text-success fw-medium">+ {{ item.entrees }} kg</td>
+                                    <td class="text-danger fw-medium">- {{ item.sorties }} kg</td>
+                                    <td class="pe-4">
+                                        <span class="badge {% if item.stock < 50 %}bg-danger text-white{% else %}bg-dark text-white{% endif %} px-3 py-2">
+                                            {{ item.stock }} kg
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card shadow-sm border-0" style="border-radius: 12px;">
+            <div class="card-header bg-white border-0 py-4" style="border-radius: 12px 12px 0 0;">
+                <div class="d-flex align-items-center">
+                    <div class="p-2 rounded-circle me-2" style="background-color: rgba(255, 193, 7, 0.1);">
+                        <i class="bi bi-truck text-warning"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 fw-bold">Arrivages attendus</h5>
+                        <p class="text-muted small mb-0">Réceptionnez les récoltes en attente</p>
+                    </div>
+                    <span class="badge bg-warning text-dark ms-auto px-3 py-2">
+                        {{ recoltes_attente|length }} en attente
+                    </span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4 py-3 border-top-0 fw-semibold">Producteur</th>
+                                <th class="py-3 border-top-0 fw-semibold">Produit</th>
+                                <th class="py-3 border-top-0 fw-semibold">Quantité</th>
+                                <th class="py-3 border-top-0 fw-semibold">Date Récolte</th>
+                                <th class="pe-4 py-3 border-top-0 fw-semibold text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in recoltes_attente %}
+                            <tr class="border-bottom">
+                                <td class="ps-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 32px; height: 32px; background-color: rgba(13, 110, 253, 0.1);">
+                                            <i class="bi bi-person text-primary"></i>
+                                        </div>
+                                        <span class="fw-medium">{{ r.producteur.user.get_full_name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="badge bg-info text-dark py-2 px-3">{{ r.type_culture }}</span>
+                                </td>
+                                <td class="py-3 fw-bold">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 28px; height: 28px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-box text-muted"></i>
+                                        </div>
+                                        {{ r.quantite }} kg
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 28px; height: 28px; background-color: rgba(13, 202, 240, 0.1);">
+                                            <i class="bi bi-calendar text-info"></i>
+                                        </div>
+                                        {{ r.date_recolte }}
+                                    </div>
+                                </td>
+                                <td class="pe-4 py-3 text-end">
+                                    <form action="{% url 'valider_reception' r.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 d-inline-flex align-items-center">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Réceptionner
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-4">
+                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                             style="width: 64px; height: 64px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-inbox text-muted fs-4"></i>
+                                        </div>
+                                        <h6 class="text-muted mb-2">Aucun arrivage prévu pour le moment</h6>
+                                        <p class="text-muted small">Les récoltes apparaîtront ici lorsqu'elles seront programmées</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styles pour embellir l'interface */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn-primary {
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.2);
+    }
+    
+    /* Animation pour la barre de progression critique */
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+    
+    .bg-danger {
+        animation: pulse 2s infinite;
+    }
+    
+    /* Effet de survol sur les lignes du tableau */
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,0.02);
+        transform: translateX(4px);
+    }
+    
+    /* Animation d'entrée pour les cartes d'entrepôts */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .col-md-4 {
+        animation: slideInUp 0.5s ease forwards;
+    }
+    
+    .col-md-4:nth-child(1) { animation-delay: 0.1s; opacity: 0; }
+    .col-md-4:nth-child(2) { animation-delay: 0.2s; opacity: 0; }
+    .col-md-4:nth-child(3) { animation-delay: 0.3s; opacity: 0; }
+    
+    /* Style pour les badges */
+    .badge {
+        transition: transform 0.2s ease;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Amélioration des barres de progression */
+    .progress {
+        overflow: hidden;
+        background-color: #e9ecef;
+    }
+    
+    .progress-bar {
+        transition: width 1s ease;
+    }
+    
+    /* Style pour l'en-tête du tableau */
+    .table-light th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Effet sur les icônes dans les cercles */
+    .rounded-circle {
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    
+    .card:hover .rounded-circle {
+        transform: scale(1.1);
+    }
+    
+    /* Style pour les lignes vides */
+    .text-center .rounded-circle {
+        transition: transform 0.5s ease;
+    }
+    
+    .text-center .rounded-circle:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Mes Récoltes{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">Mes Récoltes</h3>
+        <a href="#" class="btn btn-success btn-sm">+ Ajouter une récolte</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Culture</th>
+                    <th>Quantité</th>
+                    <th>Date</th>
+                    <th>Zone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in recoltes %}
+                <tr>
+                    <td><strong>{{ r.type_culture }}</strong></td>
+                    <td>{{ r.quantite }} kg</td>
+                    <td>{{ r.date_recolte|date:"d M Y" }}</td>
+                    <td><span class="badge bg-secondary">{{ r.producteur.zone }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">Vous n'avez pas encore enregistré de récolte.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

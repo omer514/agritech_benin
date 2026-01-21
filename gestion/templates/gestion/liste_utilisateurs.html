@@ -1,0 +1,484 @@
+{% extends "gestion/base.html" %}
+
+{% block title %}Gestion des Membres{% endblock %}
+{% block header %}Liste des Utilisateurs{% endblock %}
+{% block breadcrumb %}Gestion des Membres{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <!-- Card Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h4 class="fw-bold mb-2 text-dark">
+                <i class="bi bi-people text-success me-2"></i>
+                Membres Inscrits
+            </h4>
+            <p class="text-muted mb-0">
+                Gestion complète de tous les membres de la coopérative AgriTech Bénin
+            </p>
+        </div>
+        
+        <div class="d-flex gap-3">
+            <a href="{% url 'ajouter_membre' %}" class="btn btn-success rounded-pill px-4 py-3 d-flex align-items-center shadow-sm">
+                <i class="bi bi-person-plus me-2 fs-5"></i>
+                <div class="text-start">
+                    <span class="d-block fw-bold">+ Producteur</span>
+                    <small class="d-block opacity-75" style="font-size: 0.75rem;">Ajouter un agriculteur</small>
+                </div>
+            </a>
+            
+            <a href="{% url 'ajouter_magasinier' %}" class="btn btn-primary rounded-pill px-4 py-3 d-flex align-items-center shadow-sm">
+                <i class="bi bi-person-badge me-2 fs-5"></i>
+                <div class="text-start">
+                    <span class="d-block fw-bold">+ Magasinier</span>
+                    <small class="d-block opacity-75" style="font-size: 0.75rem;">Ajouter un responsable</small>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+        <div class="stats-card bg-light border rounded-3 p-3">
+            <h6 class="text-muted mb-1 small">Total Membres</h6>
+            <h4 class="fw-bold mb-0 text-dark">{{ utilisateurs|length }}</h4>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6">
+        <div class="stats-card bg-light border rounded-3 p-3">
+            <h6 class="text-muted mb-1 small">Producteurs</h6>
+            <h4 class="fw-bold mb-0 text-primary">{{ count_producteurs }}</h4>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6">
+        <div class="stats-card bg-light border rounded-3 p-3">
+            <h6 class="text-muted mb-1 small">Magasiniers</h6>
+            <h4 class="fw-bold mb-0 text-info">{{ count_magasiniers }}</h4>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6">
+        <div class="stats-card bg-light border rounded-3 p-3">
+            <h6 class="text-muted mb-1 small">Administrateurs</h6>
+            <h4 class="fw-bold mb-0 text-dark">{{ count_admins }}</h4>
+        </div>
+    </div>
+</div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+        <div class="table-responsive rounded-3 border">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4 py-3 border-top-0 fw-semibold">
+                            <i class="bi bi-person-circle me-2"></i>Nom & Prénom
+                        </th>
+                        <th class="py-3 border-top-0 fw-semibold">
+                            <i class="bi bi-person-vcard me-2"></i>Identifiant
+                        </th>
+                        <th class="py-3 border-top-0 fw-semibold">
+                            <i class="bi bi-tags me-2"></i>Rôle
+                        </th>
+                        <th class="py-3 border-top-0 fw-semibold">
+                            <i class="bi bi-geo-alt me-2"></i>Zone / Affectation
+                        </th>
+                        <th class="pe-4 py-3 border-top-0 fw-semibold text-end">
+                            <i class="bi bi-gear me-2"></i>Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in utilisateurs %}
+                    <tr class="border-bottom">
+                        <!-- Nom & Prénom -->
+                        <td class="ps-4 py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-icon rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style="width: 40px; height: 40px; background-color: rgba(13, 110, 253, 0.1);">
+                                    <i class="bi bi-person text-primary"></i>
+                                </div>
+                                <div>
+                                    <span class="fw-bold d-block">{{ u.first_name }} {{ u.last_name }}</span>
+                                    <small class="text-muted d-flex align-items-center">
+                                        <i class="bi bi-envelope me-1 small"></i>
+                                        {{ u.email|default:"Non spécifié" }}
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <!-- Identifiant -->
+                        <td class="py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="id-icon rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style="width: 40px; height: 40px; background-color: rgba(108, 117, 125, 0.1);">
+                                    <i class="bi bi-key text-muted"></i>
+                                </div>
+                                <code class="bg-light px-2 py-1 rounded">{{ u.username }}</code>
+                            </div>
+                        </td>
+                        
+                        <!-- Rôle -->
+                        <td class="py-3">
+                            {% if u.is_superuser %}
+                                <span class="badge rounded-pill py-3 px-4 d-inline-flex align-items-center" 
+                                      style="background-color: rgba(33, 37, 41, 0.1); color: #212529;">
+                                    <i class="bi bi-shield me-2"></i>
+                                    Super-Admin
+                                </span>
+                            {% elif u.is_staff %}
+                                <span class="badge rounded-pill py-3 px-4 d-inline-flex align-items-center" 
+                                      style="background-color: rgba(13, 202, 240, 0.1); color: #087990;">
+                                    <i class="bi bi-person-badge me-2"></i>
+                                    Magasinier
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill py-3 px-4 d-inline-flex align-items-center" 
+                                      style="background-color: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                                    <i class="bi bi-person me-2"></i>
+                                    Producteur
+                                </span>
+                            {% endif %}
+                        </td>
+                        
+                        <!-- Zone / Affectation -->
+                        <td class="py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="zone-icon rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                    style="width: 40px; height: 40px; background-color: rgba(40, 167, 69, 0.1);">
+                                    <i class="bi bi-geo-alt text-success"></i>
+                                </div>
+                                <div>
+                                    {% if u.producteur and u.producteur.zone %}
+                                        {# Titre principal : Village ou Quartier #}
+                                        <span class="fw-bold d-block text-dark">
+                                            {{ u.producteur.zone.village }}
+                                        </span>
+                                        {# Sous-titre : Arrondissement et Commune #}
+                                        <small class="text-muted">
+                                            {{ u.producteur.zone.arrondissement }} ({{ u.producteur.zone.commune }})
+                                        </small>
+                                    {% elif u.is_staff and not u.is_superuser %}
+                                       <span class="fw-bold d-block text-info">
+                    {% if u.entrepot_set.first %}
+                        {{ u.entrepot_set.first.nom }}
+                    {% else %}
+                        Gestion d'entrepôt
+                    {% endif %}
+                </span>
+                                    {% else %}
+                                        <span class="fw-medium d-block text-muted">Administration</span>
+                                        <small class="text-muted">Siège AgriTech</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <!-- Actions -->
+                        <td class="pe-4 py-3 text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                
+                                
+                                <!-- Edit Button -->
+                                <a href="{% url 'modifier_utilisateur' u.id %}" 
+                                   class="btn btn-outline-primary rounded-circle p-2 d-flex align-items-center justify-content-center"
+                                   style="width: 40px; height: 40px;"
+                                   title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                
+                                <!-- Delete Button -->
+                                <form action="{% url 'supprimer_utilisateur' u.id %}" method="post" class="d-inline-block"
+                                      onsubmit="return confirmDelete();">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                            class="btn btn-outline-danger rounded-circle p-2 d-flex align-items-center justify-content-center border-0"
+                                            style="width: 40px; height: 40px;"
+                                            title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="empty-state py-4">
+                                <div class="empty-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 80px; height: 80px; background-color: rgba(108, 117, 125, 0.1);">
+                                    <i class="bi bi-people text-muted fs-1"></i>
+                                </div>
+                                <h5 class="text-muted mb-2">Aucun membre inscrit</h5>
+                                <p class="text-muted mb-4">
+                                    Commencez par ajouter des membres à la plateforme
+                                </p>
+                                <div class="d-flex gap-3 justify-content-center">
+                                    <a href="{% url 'ajouter_membre' %}" class="btn btn-success rounded-pill px-4 py-2">
+                                        <i class="bi bi-person-plus me-2"></i>
+                                        Ajouter un producteur
+                                    </a>
+                                    <a href="{% url 'ajouter_magasinier' %}" class="btn btn-primary rounded-pill px-4 py-2">
+                                        <i class="bi bi-person-badge me-2"></i>
+                                        Ajouter un magasinier
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if utilisateurs.has_other_pages %}
+    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+        <div class="text-muted">
+            Page {{ utilisateurs.number }} sur {{ utilisateurs.paginator.num_pages }}
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-0">
+                {% if utilisateurs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ utilisateurs.previous_page_number }}" aria-label="Previous">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in utilisateurs.paginator.page_range %}
+                    {% if utilisateurs.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > utilisateurs.number|add:'-3' and num < utilisateurs.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if utilisateurs.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ utilisateurs.next_page_number }}" aria-label="Next">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Additional Styles for this page */
+    .stats-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        border-color: rgba(45, 106, 79, 0.2) !important;
+    }
+    
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(45, 106, 79, 0.02);
+        transform: translateX(5px);
+    }
+    
+    .table-hover tbody tr:hover .avatar-icon {
+        background-color: rgba(13, 110, 253, 0.2) !important;
+        transform: scale(1.1);
+    }
+    
+    .table-hover tbody tr:hover .id-icon {
+        background-color: rgba(108, 117, 125, 0.2) !important;
+        transform: scale(1.1);
+    }
+    
+    .table-hover tbody tr:hover .zone-icon {
+        background-color: rgba(220, 53, 69, 0.2) !important;
+        transform: scale(1.1);
+    }
+    
+    .icon-wrapper {
+        transition: all 0.3s ease;
+    }
+    
+    .stats-card:hover .icon-wrapper {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .empty-state {
+        animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .badge {
+        transition: all 0.3s ease;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Action Buttons */
+    .btn-outline-primary, .btn-outline-secondary, .btn-outline-danger {
+        transition: all 0.3s ease;
+        border-width: 2px;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: var(--agri-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Code styling */
+    code {
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: #d63384;
+    }
+    
+    /* Pagination Styles */
+    .page-link {
+        color: var(--agri-primary);
+        border: 1px solid #dee2e6;
+        margin: 0 2px;
+        border-radius: 8px !important;
+        min-width: 40px;
+        text-align: center;
+    }
+    
+    .page-link:hover {
+        background-color: rgba(45, 106, 79, 0.1);
+        border-color: var(--agri-primary);
+    }
+    
+    .page-item.active .page-link {
+        background-color: var(--agri-primary);
+        border-color: var(--agri-primary);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border: none;
+            border-radius: 0;
+            margin: 0 -1.5rem;
+            width: calc(100% + 3rem);
+        }
+        
+        .stats-card {
+            margin-bottom: 15px;
+        }
+        
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .d-flex.gap-3 {
+            flex-direction: column;
+            width: 100%;
+            gap: 10px !important;
+        }
+        
+        .btn-success, .btn-primary {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-success .text-start, .btn-primary .text-start {
+            text-align: center !important;
+        }
+        
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .page-link {
+            margin: 2px;
+            min-width: 36px;
+            padding: 6px 10px;
+        }
+        
+        .empty-state .d-flex.gap-3 {
+            flex-direction: column;
+        }
+        
+        .empty-state .btn-success, .empty-state .btn-primary {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .content-card {
+            padding: 20px;
+        }
+        
+        .table-hover tbody tr:hover {
+            transform: translateX(2px);
+        }
+        
+        .d-flex.align-items-center {
+            flex-wrap: wrap;
+        }
+        
+        .rounded-circle.me-3 {
+            margin-right: 10px !important;
+            margin-bottom: 10px;
+        }
+        
+        .text-end .d-flex {
+            flex-wrap: wrap;
+            justify-content: center !important;
+            gap: 5px !important;
+        }
+        
+        .rounded-circle.p-2 {
+            width: 35px !important;
+            height: 35px !important;
+        }
+    }
+</style>
+
+<script>
+    function confirmDelete() {
+        return confirm('⚠️ Attention : Cette action est irréversible.\n\nÊtes-vous sûr de vouloir supprimer définitivement ce membre ?\n\nToutes les données associées seront également supprimées.');
+    }
+</script>
+{% endblock %}
