@@ -2,46 +2,55 @@
 
 {% block title %}Mon Espace Producteur{% endblock %}
 {% block header %}
-<div class="d-flex justify-content-between align-items-center w-100">
-    <span class="fs-4 fw-semibold text-dark d-none d-md-block">Tableau de Bord Producteur</span>
-    <span class="fs-5 fw-semibold text-dark d-md-none">Tableau de Bord</span>
-    <div class="d-flex align-items-center">
-        <div class="me-2 p-2 rounded-circle" style="background-color: rgba(25, 135, 84, 0.1);">
-            <i class="bi bi-person-circle text-success"></i>
+<div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-1 gap-sm-2">
+    <span class="fs-5 fw-semibold text-dark d-none d-md-block">Tableau de Bord Producteur</span>
+    <span class="fs-5 fw-semibold text-dark d-md-none text-truncate">Tableau de Bord</span>
+    <div class="d-flex align-items-center ms-auto ms-sm-0">
+        <div class="me-1 me-sm-2 p-1 p-sm-2 rounded-circle" style="background-color: rgba(25, 135, 84, 0.1); min-width: 36px; min-height: 36px;">
+            <i class="bi bi-person-circle text-success fs-6"></i>
         </div>
-        <span class="text-muted d-none d-sm-block">{{ user.first_name|default:user.username }}</span>
+        <span class="text-muted d-none d-sm-block text-truncate" style="max-width: 120px;">{{ user.first_name|default:user.username }}</span>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="row g-3 g-md-4 mb-3 mb-md-4">
+<div class="row g-2 g-sm-3 g-md-4 mb-3 mb-md-4">
     <div class="col-12 col-md-8">
         <div class="card shadow-sm border-0 h-100" style="border-radius: 12px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
-            <div class="card-body p-3 p-md-4 p-lg-5">
+            <div class="card-body p-2 p-sm-3 p-md-4 p-lg-5">
                 <div class="d-flex align-items-center h-100">
                     <div class="flex-grow-1">
-                        <div class="mb-3 mb-md-4">
-                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 mb-2 mb-md-3 d-inline-block">
-                                <i class="bi bi-arrow-up-right-circle me-1 me-md-2"></i>Producteur Actif
+                        <div class="mb-2 mb-sm-3 mb-md-4">
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 px-sm-3 py-1 py-sm-2 mb-1 mb-md-3 d-inline-flex align-items-center">
+                                <i class="bi bi-arrow-up-right-circle me-1 me-sm-2"></i>
+                                <span class="d-none d-sm-inline">Producteur Actif</span>
+                                <span class="d-sm-none">Actif</span>
                             </span>
-                            <h1 class="fw-bold text-dark mb-2" style="font-size: clamp(1.8rem, 5vw, 2.5rem);">
-                                Bonjour, {{ user.first_name|default:user.username }} !
+                            <h1 class="fw-bold text-dark mb-1 mb-sm-2" style="font-size: clamp(1.4rem, 4vw, 2.5rem); line-height: 1.2;">
+                                Bonjour, <span class="d-block d-sm-inline">{{ user.first_name|default:user.username|truncatechars:15 }}</span> !
                             </h1>
-                            <p class="text-muted mb-3 mb-md-4" style="font-size: clamp(0.9rem, 2.5vw, 1.1rem);">
-                                Gérez vos récoltes et suivez vos livraisons en temps réel.
+                            <p class="text-muted mb-2 mb-sm-3 mb-md-4" style="font-size: clamp(0.85rem, 2.5vw, 1.1rem);">
+                                Gérez vos récoltes en temps réel.
                             </p>
                         </div>
-                        <a href="{% url 'declarer_recolte' %}" 
-                           class="btn btn-success rounded-pill w-100 w-md-auto px-4 px-md-5 py-3 fs-6 fs-md-5 shadow-sm d-inline-flex align-items-center justify-content-center">
-                            <i class="bi bi-plus-circle me-2 me-md-3 fs-5 fs-md-4"></i> 
-                            <span>Déclarer une nouvelle récolte</span>
-                        </a>
+                        <div class="d-block d-sm-flex gap-2">
+                            <a href="{% url 'declarer_recolte' %}" 
+                               class="btn btn-success rounded-pill w-100 w-sm-auto px-3 px-sm-4 py-2 py-sm-3 fs-6 fs-md-5 shadow-sm d-inline-flex align-items-center justify-content-center mb-2 mb-sm-0">
+                                <i class="bi bi-plus-circle me-1 me-sm-2 fs-6"></i> 
+                                <span>Nouvelle récolte</span>
+                            </a>
+                            <a href="{% url 'liste_recoltes' %}" 
+                               class="btn btn-outline-success rounded-pill w-100 w-sm-auto px-3 px-sm-4 py-2 py-sm-3 fs-6 d-inline-flex align-items-center justify-content-center">
+                                <i class="bi bi-clock-history me-1 me-sm-2 fs-6"></i> 
+                                <span>Historique</span>
+                            </a>
+                        </div>
                     </div>
                     <div class="d-none d-lg-block ms-3 ms-md-4">
                         <div class="position-relative">
-                            <div class="rounded-circle p-3 p-md-4" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.2) 100%);">
-                                <i class="bi bi-sun text-warning" style="font-size: clamp(3rem, 8vw, 6rem);"></i>
+                            <div class="rounded-circle p-2 p-sm-3 p-md-4" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.2) 100%);">
+                                <i class="bi bi-sun text-warning" style="font-size: clamp(2rem, 6vw, 4rem);"></i>
                             </div>
                         </div>
                     </div>
@@ -50,146 +59,149 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-4 mt-2 mt-sm-0">
         <div class="card shadow-sm border-0 h-100" style="border-radius: 12px; background: linear-gradient(135deg, #198754 0%, #157347 100%);">
-            <div class="card-body p-3 p-md-4 p-lg-5 d-flex flex-column">
-                <div class="mb-2 mb-md-3">
-                    <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-2 mb-2 mb-md-3 d-inline-block">
-                        <i class="bi bi-check-circle me-1 me-md-2"></i>Validé
+            <div class="card-body p-2 p-sm-3 p-md-4 p-lg-5 d-flex flex-column">
+                <div class="mb-1 mb-sm-2 mb-md-3">
+                    <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-2 px-sm-3 py-1 py-sm-2 mb-1 mb-sm-2 d-inline-flex align-items-center">
+                        <i class="bi bi-check-circle me-1 me-sm-2 fs-6"></i>
+                        <span class="d-none d-sm-inline">Validé</span>
+                        <span class="d-sm-none">✓</span>
                     </span>
                     <h6 class="text-uppercase small fw-bold opacity-85 mb-0">Total livré</h6>
                 </div>
                 <div class="my-auto">
                     <h1 class="fw-bold mb-0 text-white text-center text-md-start" 
-                        style="font-size: clamp(2.5rem, 8vw, 3.5rem);">
+                        style="font-size: clamp(1.8rem, 6vw, 2.5rem); line-height: 1;">
                         {{ total_livre }} <small class="opacity-75" style="font-size: 0.5em;">kg</small>
                     </h1>
                 </div>
-                <div class="mt-3 mt-md-4 text-center">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center p-2 p-md-3" 
+                <div class="mt-2 mt-sm-3 mt-md-4 text-center">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center p-1 p-sm-2 p-md-3" 
                          style="background-color: rgba(255, 255, 255, 0.1);">
-                        <i class="bi bi-truck text-white" style="font-size: clamp(1.5rem, 4vw, 2.5rem);"></i>
+                        <i class="bi bi-truck text-white" style="font-size: clamp(1.2rem, 3vw, 1.8rem);"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-12 mt-2 mt-md-3">
+    <div class="col-12 mt-2 mt-sm-3">
         <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
-            <div class="card-header bg-white border-0 py-3 py-md-4 px-3 px-md-4 px-lg-5">
-                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
-                    <div class="d-flex align-items-center mb-2 mb-md-0">
-                        <div class="rounded-circle p-2 me-2 me-md-3" style="background-color: rgba(25, 135, 84, 0.1);">
-                            <i class="bi bi-clock-history text-success fs-5"></i>
+            <div class="card-header bg-white border-0 py-2 py-sm-3 px-2 px-sm-3 px-md-4">
+                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2">
+                    <div class="d-flex align-items-center mb-0">
+                        <div class="rounded-circle p-1 p-sm-2 me-1 me-sm-2 me-md-3" style="background-color: rgba(25, 135, 84, 0.1); min-width: 32px; min-height: 32px;">
+                            <i class="bi bi-clock-history text-success fs-6"></i>
                         </div>
                         <div>
-                            <h5 class="fw-bold mb-0 text-dark" style="font-size: clamp(1.1rem, 3vw, 1.25rem);">
+                            <h5 class="fw-bold mb-0 text-dark" style="font-size: clamp(1rem, 3vw, 1.25rem);">
                                 Mes dernières déclarations
                             </h5>
-                            <p class="text-muted small mb-0 d-none d-md-block">Historique de vos récoltes récentes</p>
+                            <p class="text-muted small mb-0 d-none d-sm-block">Historique de vos récoltes récentes</p>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center w-100 w-md-auto justify-content-between justify-content-md-start">
-                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 me-2">
-                            {{ recoltes|length }} récolte{{ recoltes|pluralize }}
+                    <div class="d-flex align-items-center w-100 w-sm-auto justify-content-between justify-content-sm-start gap-1">
+                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 px-sm-3 py-1 py-sm-2 me-1 me-sm-2">
+                            {{ recoltes|length }} <span class="d-none d-sm-inline">récolte{{ recoltes|pluralize }}</span>
+                            <span class="d-sm-none">rec.</span>
                         </span>
                         <a href="{% url 'liste_recoltes' %}" 
-                           class="btn btn-outline-secondary rounded-pill px-3 px-md-4 py-2 d-inline-flex align-items-center">
-                            <i class="bi bi-clock-history me-1 me-md-2"></i>
-                            <span class="d-none d-md-inline">Voir l'historique</span>
-                            <span class="d-md-none">Historique</span>
+                           class="btn btn-outline-secondary rounded-pill px-2 px-sm-3 px-md-4 py-1 py-sm-2 d-inline-flex align-items-center">
+                            <i class="bi bi-clock-history me-1 me-sm-2 fs-6"></i>
+                            <span class="d-none d-sm-inline">Voir l'historique</span>
+                            <span class="d-sm-none">Hist.</span>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light d-none d-md-table-header-group">
+                <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table class="table table-hover align-middle mb-0" style="min-width: 600px;">
+                        <thead class="table-light d-none d-sm-table-header-group">
                             <tr>
-                                <th class="ps-4 ps-md-5 py-3 py-md-4 border-top-0 fw-semibold">Date</th>
-                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Type de Culture</th>
-                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Quantité</th>
-                                <th class="py-3 py-md-4 border-top-0 fw-semibold">Entrepôt</th>
-                                <th class="pe-4 pe-md-5 py-3 py-md-4 border-top-0 fw-semibold text-end">Statut</th>
+                                <th class="ps-3 ps-sm-4 ps-md-5 py-2 py-sm-3 border-top-0 fw-semibold">Date</th>
+                                <th class="py-2 py-sm-3 border-top-0 fw-semibold">Type</th>
+                                <th class="py-2 py-sm-3 border-top-0 fw-semibold">Quantité</th>
+                                <th class="py-2 py-sm-3 border-top-0 fw-semibold d-none d-md-table-cell">Entrepôt</th>
+                                <th class="pe-3 pe-sm-4 pe-md-5 py-2 py-sm-3 border-top-0 fw-semibold text-end">Statut</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for r in recoltes %}
-                            <tr class="border-bottom">
-                                <td class="ps-3 ps-md-5 py-3 py-md-4">
+                            <tr class="border-bottom" onclick="window.location.href='#'" style="cursor: pointer;">
+                                <td class="ps-2 ps-sm-3 ps-md-5 py-2 py-sm-3">
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3" 
-                                             style="width: 36px; height: 36px; background-color: rgba(108, 117, 125, 0.1);">
-                                            <i class="bi bi-calendar text-muted"></i>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-1 me-sm-2 me-md-3" 
+                                             style="width: 28px; height: 28px; min-width: 28px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-calendar text-muted fs-6"></i>
                                         </div>
                                         <div>
-                                            <span class="fw-medium d-block">{{ r.date_recolte|date:"d/m/Y" }}</span>
-                                            <small class="text-muted d-none d-md-block">Date de récolte</small>
+                                            <span class="fw-medium d-block" style="font-size: 0.9rem;">{{ r.date_recolte|date:"d/m/Y" }}</span>
+                                            <small class="text-muted d-none d-sm-block" style="font-size: 0.75rem;">Date récolte</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3 py-md-4">
+                                <td class="py-2 py-sm-3">
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3" 
-                                             style="width: 36px; height: 36px; background-color: rgba(25, 135, 84, 0.1);">
-                                            <i class="bi bi-tree text-success"></i>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-1 me-sm-2 me-md-3 d-none d-sm-flex" 
+                                             style="width: 28px; height: 28px; min-width: 28px; background-color: rgba(25, 135, 84, 0.1);">
+                                            <i class="bi bi-tree text-success fs-6"></i>
                                         </div>
-                                        <span class="fw-bold text-success">{{ r.type_culture }}</span>
+                                        <span class="fw-bold text-success" style="font-size: 0.9rem;">{{ r.type_culture|truncatechars:12 }}</span>
                                     </div>
                                 </td>
-                                <td class="py-3 py-md-4">
+                                <td class="py-2 py-sm-3">
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 me-md-3 d-none d-md-flex" 
-                                             style="width: 36px; height: 36px; background-color: rgba(13, 110, 253, 0.1);">
-                                            <i class="bi bi-scale text-primary"></i>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-1 me-sm-2 me-md-3 d-none d-sm-flex" 
+                                             style="width: 28px; height: 28px; min-width: 28px; background-color: rgba(13, 110, 253, 0.1);">
+                                            <i class="bi bi-scale text-primary fs-6"></i>
                                         </div>
-                                        <span class="fw-bold">{{ r.quantite }} kg</span>
+                                        <span class="fw-bold" style="font-size: 0.9rem;">{{ r.quantite }} kg</span>
                                     </div>
                                 </td>
-                                <td class="py-3 py-md-4 d-none d-md-table-cell">
+                                <td class="py-2 py-sm-3 d-none d-md-table-cell">
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                             style="width: 36px; height: 36px; background-color: rgba(255, 193, 7, 0.1);">
-                                            <i class="bi bi-building text-warning"></i>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3 d-none d-sm-flex" 
+                                             style="width: 28px; height: 28px; min-width: 28px; background-color: rgba(255, 193, 7, 0.1);">
+                                            <i class="bi bi-building text-warning fs-6"></i>
                                         </div>
-                                        <span class="fw-medium">{{ r.entrepot_destination.nom }}</span>
+                                        <span class="fw-medium" style="font-size: 0.9rem;">{{ r.entrepot_destination.nom|truncatechars:15 }}</span>
                                     </div>
                                 </td>
-                                <td class="pe-3 pe-md-5 py-3 py-md-4 text-end">
+                                <td class="pe-2 pe-sm-3 pe-md-5 py-2 py-sm-3 text-end">
                                     {% if r.statut == 'EN_ATTENTE' %}
-                                    <span class="badge rounded-pill py-2 px-3 d-inline-flex align-items-center" 
-                                          style="background-color: rgba(255, 193, 7, 0.1); color: #664d03;">
-                                        <i class="bi bi-clock-history me-1 me-md-2"></i>
-                                        <span class="d-none d-md-inline">En cours</span>
-                                        <span class="d-md-none">Attente</span>
+                                    <span class="badge rounded-pill py-1 py-sm-2 px-2 px-sm-3 d-inline-flex align-items-center" 
+                                          style="background-color: rgba(255, 193, 7, 0.1); color: #664d03; font-size: 0.8rem;">
+                                        <i class="bi bi-clock-history me-1 me-sm-2"></i>
+                                        <span class="d-none d-sm-inline">En cours</span>
+                                        <span class="d-sm-none">...</span>
                                     </span>
                                     {% else %}
-                                    <span class="badge rounded-pill py-2 px-3 d-inline-flex align-items-center" 
-                                          style="background-color: rgba(25, 135, 84, 0.1); color: #0f5132;">
-                                        <i class="bi bi-check-circle-fill me-1 me-md-2"></i>
-                                        <span class="d-none d-md-inline">Réceptionné</span>
-                                        <span class="d-md-none">Validé</span>
+                                    <span class="badge rounded-pill py-1 py-sm-2 px-2 px-sm-3 d-inline-flex align-items-center" 
+                                          style="background-color: rgba(25, 135, 84, 0.1); color: #0f5132; font-size: 0.8rem;">
+                                        <i class="bi bi-check-circle-fill me-1 me-sm-2"></i>
+                                        <span class="d-none d-sm-inline">Réceptionné</span>
+                                        <span class="d-sm-none">✓</span>
                                     </span>
                                     {% endif %}
                                 </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" class="text-center py-4 py-md-5">
-                                    <div class="py-3 py-md-5">
-                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mb-md-4" 
-                                             style="width: 60px; height: 60px; background-color: rgba(108, 117, 125, 0.1);">
-                                            <i class="bi bi-inbox text-muted"></i>
+                                <td colspan="5" class="text-center py-3 py-sm-4">
+                                    <div class="py-2 py-sm-3 py-md-4">
+                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-2 mb-sm-3 mb-md-4" 
+                                             style="width: 50px; height: 50px; background-color: rgba(108, 117, 125, 0.1);">
+                                            <i class="bi bi-inbox text-muted fs-4"></i>
                                         </div>
-                                        <h5 class="text-muted mb-2 mb-md-3" style="font-size: clamp(1rem, 3vw, 1.25rem);">
+                                        <h5 class="text-muted mb-1 mb-sm-2 mb-md-3" style="font-size: clamp(0.9rem, 3vw, 1.1rem);">
                                             Aucune récolte déclarée
                                         </h5>
-                                        <p class="text-muted mb-3 mb-md-4">Commencez par déclarer votre première récolte</p>
+                                        <p class="text-muted mb-2 mb-sm-3 mb-md-4" style="font-size: 0.85rem;">Commencez par déclarer votre première récolte</p>
                                         <a href="{% url 'declarer_recolte' %}" 
-                                           class="btn btn-success rounded-pill px-4 py-2 d-inline-flex align-items-center">
-                                            <i class="bi bi-plus-circle me-2"></i> 
+                                           class="btn btn-success rounded-pill px-3 px-sm-4 py-1 py-sm-2 d-inline-flex align-items-center">
+                                            <i class="bi bi-plus-circle me-1 me-sm-2"></i> 
                                             <span>Déclarer une récolte</span>
                                         </a>
                                     </div>
@@ -198,6 +210,9 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+                <div class="d-block d-sm-none text-center py-2 bg-light border-top">
+                    <small class="text-muted">Glisser → pour voir plus d'informations</small>
                 </div>
             </div>
         </div>
@@ -211,64 +226,120 @@
     }
     
     .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
     }
     
-    .btn-success {
+    .btn-success, .btn-outline-success {
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        min-height: 44px; /* Taille tactile minimum */
     }
     
-    .btn-success:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(25, 135, 84, 0.2);
+    .btn-success:hover, .btn-outline-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(25, 135, 84, 0.2);
     }
     
-    @media (max-width: 768px) {
-        /* Ajustements pour mobile */
-        .card-body {
-            padding: 1.5rem !important;
+    /* Optimisations spécifiques mobile */
+    @media (max-width: 576px) {
+        /* Ajustements pour petits mobiles */
+        body {
+            font-size: 14px;
+            padding-bottom: 20px;
         }
         
-        .btn-success, .btn-outline-secondary {
+        .container, .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .card-body {
+            padding: 1rem !important;
+        }
+        
+        .btn-success, .btn-outline-secondary, .btn-outline-success {
             width: 100%;
             margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.75rem 1rem;
         }
         
         .table-responsive {
             border-radius: 0;
-            margin: 0 -1rem;
-            width: calc(100% + 2rem);
+            margin: 0 -0.5rem;
+            width: calc(100% + 1rem);
         }
         
-        /* Amélioration de la lisibilité sur mobile */
-        body {
-            font-size: 14px;
-        }
-        
+        /* Amélioration de la lisibilité */
         h1, h2, h3, h4, h5, h6 {
-            line-height: 1.3;
+            line-height: 1.2;
+            margin-bottom: 0.5rem !important;
         }
         
-        /* Padding réduit sur mobile */
-        .px-md-5, .ps-md-5, .pe-md-5 {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+        /* Réduction des marges */
+        .mb-2, .mb-3, .mb-4 {
+            margin-bottom: 0.5rem !important;
         }
         
-        /* Taille des icônes adaptée */
-        .rounded-circle i {
-            font-size: 1.2rem !important;
+        .mt-2, .mt-3, .mt-4 {
+            margin-top: 0.5rem !important;
         }
         
-        /* Boutons plus grands pour le tactile */
+        /* Text truncation pour éviter le débordement */
+        .text-truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        
+        /* Boutons tactiles plus grands */
         .btn {
             min-height: 44px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
+        }
+        
+        /* Prévention du zoom sur iOS */
+        input, select, textarea, button {
+            font-size: 16px !important;
+        }
+        
+        /* Ajustement des badges */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem !important;
+        }
+        
+        /* Réduction de la taille des icônes */
+        .rounded-circle i {
+            font-size: 1rem !important;
+        }
+    }
+    
+    @media (min-width: 577px) and (max-width: 768px) {
+        /* Tablettes et grands mobiles */
+        .card-body {
+            padding: 1.5rem !important;
+        }
+        
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+        
+        /* Ajustement de la grille */
+        .row.g-3 > div {
+            margin-bottom: 1rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.9rem;
         }
     }
     
@@ -276,7 +347,7 @@
     @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
@@ -285,12 +356,12 @@
     }
     
     .col-md-8, .col-md-4 {
-        animation: fadeInUp 0.6s ease forwards;
+        animation: fadeInUp 0.5s ease forwards;
     }
     
     .col-12 {
-        animation: fadeInUp 0.8s ease forwards;
-        animation-delay: 0.2s;
+        animation: fadeInUp 0.6s ease forwards;
+        animation-delay: 0.1s;
         opacity: 0;
     }
     
@@ -302,8 +373,6 @@
     
     .table-hover tbody tr:hover {
         background-color: rgba(25, 135, 84, 0.02);
-        transform: translateX(5px);
-        box-shadow: inset 4px 0 0 #198754;
     }
     
     /* Animation des icônes */
@@ -312,12 +381,7 @@
     }
     
     .card:hover .rounded-circle:not(.d-inline-flex) {
-        transform: scale(1.1) rotate(5deg);
-    }
-    
-    .table-hover tbody tr:hover .rounded-circle {
-        transform: scale(1.1);
-        background-color: rgba(25, 135, 84, 0.2) !important;
+        transform: scale(1.05);
     }
     
     /* Style pour les badges */
@@ -327,14 +391,10 @@
         letter-spacing: 0.3px;
     }
     
-    .badge:hover {
-        transform: scale(1.05);
-    }
-    
     /* Animation pulsante pour le total livré */
     @keyframes pulse {
         0% { transform: scale(1); }
-        50% { transform: scale(1.03); }
+        50% { transform: scale(1.02); }
         100% { transform: scale(1); }
     }
     
@@ -347,47 +407,193 @@
         background-color: #f8f9fa;
         border-bottom: 2px solid #e9ecef;
         font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     
-    /* Media queries supplémentaires */
+    /* Touch-friendly optimizations */
+    .btn, .badge, a {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mobile-only styles */
     @media (max-width: 576px) {
-        /* Encore plus spécifique pour petits mobiles */
-        .d-flex.flex-column.flex-md-row {
-            flex-direction: column !important;
+        /* Stack cards vertically */
+        .col-12.col-md-8, .col-12.col-md-4 {
+            width: 100%;
         }
         
-        .w-100.w-md-auto {
-            width: 100% !important;
-        }
-        
-        .justify-content-between.justify-content-md-start {
-            justify-content: space-between !important;
-        }
-        
-        /* Masquer certaines colonnes sur très petits écrans */
-        .d-none.d-md-table-cell {
+        /* Hide non-essential columns on mobile */
+        .d-none.d-md-table-cell, .d-none.d-sm-table-header-group {
             display: none !important;
         }
         
-        /* Réduire encore les paddings */
-        .card-body {
-            padding: 1rem !important;
-        }
-    }
-    
-    @media (min-width: 769px) and (max-width: 992px) {
-        /* Tablettes */
-        .card-body {
-            padding: 2rem !important;
+        /* Simplify table rows for mobile */
+        .table-hover tbody tr {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
         }
         
-        .btn {
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
+        /* Make cards full width on mobile */
+        .card {
+            margin-left: -5px;
+            margin-right: -5px;
+            width: calc(100% + 10px);
+            border-radius: 8px !important;
+        }
+        
+        /* Better touch targets for mobile */
+        .table tbody tr td {
+            padding: 12px 8px !important;
+        }
+        
+        /* Mobile-friendly font sizes */
+        .fs-4 { font-size: 1.1rem !important; }
+        .fs-5 { font-size: 1rem !important; }
+        .fs-6 { font-size: 0.9rem !important; }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .card {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%) !important;
+            color: #e2e8f0;
+        }
+        
+        .text-dark {
+            color: #e2e8f0 !important;
+        }
+        
+        .text-muted {
+            color: #a0aec0 !important;
+        }
+        
+        .table-light th {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .bg-light {
+            background-color: #4a5568 !important;
+        }
+        
+        .bg-white {
+            background-color: #2d3748 !important;
         }
     }
 </style>
+
+<script>
+    // Script pour améliorer l'expérience mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        // Détection du mobile
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 576;
+        
+        if (isMobile || isSmallScreen) {
+            // Optimisation pour mobile
+            document.body.classList.add('mobile-device');
+            
+            // Amélioration des interactions tactiles
+            const interactiveElements = document.querySelectorAll('.btn, .card, .table-hover tbody tr, a[href]');
+            interactiveElements.forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                });
+                
+                // Prévenir le double-tap pour zoom
+                element.addEventListener('touchstart', function(e) {
+                    if (e.touches.length > 1) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+            
+            // Optimisation du tableau pour mobile
+            const tableRows = document.querySelectorAll('.table-hover tbody tr');
+            if (tableRows.length > 0) {
+                tableRows.forEach(row => {
+                    row.addEventListener('click', function(e) {
+                        // Empêcher l'ouverture accidentelle sur scroll
+                        if (!this.classList.contains('scrolling')) {
+                            // Ajouter ici la logique pour ouvrir les détails
+                            console.log('Row clicked - mobile optimized');
+                        }
+                    });
+                    
+                    // Détection du scroll vs tap
+                    let touchStartX = 0;
+                    let touchStartY = 0;
+                    
+                    row.addEventListener('touchstart', function(e) {
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        this.classList.remove('scrolling');
+                    });
+                    
+                    row.addEventListener('touchmove', function(e) {
+                        const touchMoveX = e.touches[0].clientX;
+                        const touchMoveY = e.touches[0].clientY;
+                        
+                        // Si le mouvement est principalement horizontal, c'est un scroll
+                        if (Math.abs(touchMoveX - touchStartX) > Math.abs(touchMoveY - touchStartY)) {
+                            this.classList.add('scrolling');
+                        }
+                    });
+                });
+            }
+            
+            // Optimiser les performances sur mobile
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                // Réduire les animations sur mobile
+                card.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+            });
+            
+            // Désactiver certaines animations lourdes sur mobile
+            const animatedElements = document.querySelectorAll('.col-md-4 .card h1');
+            animatedElements.forEach(element => {
+                element.style.animation = 'none';
+            });
+        }
+        
+        // Gestion du redimensionnement
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 576) {
+                // Appliquer les optimisations mobiles
+                document.body.classList.add('mobile-view');
+            } else {
+                document.body.classList.remove('mobile-view');
+            }
+        });
+        
+        // Initialiser l'état mobile
+        if (window.innerWidth <= 576) {
+            document.body.classList.add('mobile-view');
+        }
+    });
+    
+    // Prévenir le zoom sur iOS
+    document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+</script>
 {% endblock %}

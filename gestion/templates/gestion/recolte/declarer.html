@@ -5,49 +5,522 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-success text-white p-3">
-                <h5 class="mb-0"><i class="bi bi-patch-check"></i> Formulaire de dépôt</h5>
+            <div class="card-header bg-success text-white p-2 p-sm-3">
+                <h5 class="mb-0 fs-5 fs-sm-4 d-flex align-items-center">
+                    <i class="bi bi-patch-check me-2"></i>
+                    <span>Formulaire de dépôt</span>
+                </h5>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-2 p-sm-3 p-md-4">
                 <form method="post">
                     {% csrf_token %}
                     
                     <div class="mb-3">
-                        <label class="form-label fw-bold"><i class="bi bi-leaf"></i> Type de culture</label>
+                        <label class="form-label fw-bold d-flex align-items-center mb-1 mb-sm-2">
+                            <i class="bi bi-leaf me-1 me-sm-2 fs-6"></i>
+                            <span>Type de culture</span>
+                        </label>
                         {{ form.type_culture }}
-                        <small class="text-muted">Sélectionnez le produit que vous souhaitez livrer.</small>
+                        {% if form.type_culture.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.type_culture.errors }}
+                        </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1 small">Sélectionnez le produit à livrer.</small>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold"><i class="bi bi-scales"></i> Quantité estimée (kg)</label>
+                        <label class="form-label fw-bold d-flex align-items-center mb-1 mb-sm-2">
+                            <i class="bi bi-scales me-1 me-sm-2 fs-6"></i>
+                            <span>Quantité estimée (kg)</span>
+                        </label>
                         <div class="input-group">
                             {{ form.quantite }}
                             <span class="input-group-text bg-light">kg</span>
                         </div>
+                        {% if form.quantite.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.quantite.errors }}
+                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold"><i class="bi bi-calendar-event"></i> Date de récolte</label>
+                        <label class="form-label fw-bold d-flex align-items-center mb-1 mb-sm-2">
+                            <i class="bi bi-calendar-event me-1 me-sm-2 fs-6"></i>
+                            <span>Date de récolte</span>
+                        </label>
                         {{ form.date_recolte }}
+                        {% if form.date_recolte.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.date_recolte.errors }}
+                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold"><i class="bi bi-house-down"></i> Entrepôt de destination</label>
+                        <label class="form-label fw-bold d-flex align-items-center mb-1 mb-sm-2">
+                            <i class="bi bi-house-down me-1 me-sm-2 fs-6"></i>
+                            <span>Entrepôt de destination</span>
+                        </label>
                         {{ form.entrepot_destination }}
-                        <small class="text-muted">Choisissez l'entrepôt le plus proche de votre zone.</small>
+                        {% if form.entrepot_destination.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.entrepot_destination.errors }}
+                        </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1 small">Choisissez l'entrepôt le plus proche.</small>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg shadow-sm">
-                            <i class="bi bi-send-check"></i> Enregistrer la déclaration
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm py-2 py-sm-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-send-check me-2 fs-5"></i>
+                            <span>Enregistrer la déclaration</span>
                         </button>
-                        <a href="{% url 'liste_recoltes' %}" class="btn btn-light">Annuler</a>
+                        <a href="{% url 'liste_recoltes' %}" class="btn btn-light py-2 py-sm-3">Annuler</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Styles généraux */
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .form-label {
+        color: #333;
+    }
+    
+    .form-control, select {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #dee2e6;
+        font-size: 1rem;
+    }
+    
+    .form-control:focus, select:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .btn-success {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+    }
+    
+    .btn-light {
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-light:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-1px);
+    }
+    
+    /* Optimisations mobile */
+    @media (max-width: 576px) {
+        body {
+            font-size: 14px;
+        }
+        
+        .container, .container-fluid {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        .row.justify-content-center {
+            margin: 0;
+        }
+        
+        .col-12 {
+            padding: 0;
+        }
+        
+        .card {
+            margin: 0 -12px;
+            width: calc(100% + 24px);
+            border-radius: 0 !important;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .card-header {
+            border-radius: 0 !important;
+        }
+        
+        .card-body {
+            padding: 1.5rem !important;
+        }
+        
+        /* Form elements mobile */
+        .form-control, select {
+            padding: 0.875rem 1rem;
+            font-size: 16px !important; /* Prévention zoom iOS */
+            min-height: 44px; /* Taille tactile minimum */
+        }
+        
+        .input-group-text {
+            padding: 0.875rem 0.75rem;
+            min-height: 44px;
+        }
+        
+        /* Boutons mobiles */
+        .btn, .btn-lg {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            padding: 0.875rem 1rem !important;
+            min-height: 44px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+        
+        .btn-lg i {
+            font-size: 1.25rem;
+        }
+        
+        /* Labels et textes */
+        .form-label {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .text-muted {
+            font-size: 0.85rem;
+        }
+        
+        /* Espacement */
+        .mb-3, .mb-4 {
+            margin-bottom: 1.25rem !important;
+        }
+        
+        .gap-2 {
+            gap: 0.75rem !important;
+        }
+        
+        /* Ajustement du titre */
+        .card-header h5 {
+            font-size: 1.1rem;
+        }
+        
+        /* Prévention zoom iOS sur inputs */
+        input, select, textarea {
+            font-size: 16px !important;
+            max-height: 44px;
+        }
+        
+        /* Meilleur contraste sur mobile */
+        .form-control {
+            background-color: #fff;
+            border: 2px solid #e9ecef;
+        }
+        
+        .form-control:focus {
+            border-width: 2px;
+            background-color: #fff;
+        }
+    }
+    
+    @media (min-width: 577px) and (max-width: 768px) {
+        /* Tablettes */
+        .card-body {
+            padding: 2rem !important;
+        }
+        
+        .btn, .btn-lg {
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .form-control, select {
+            padding: 0.75rem 1rem;
+        }
+        
+        .col-sm-10 {
+            max-width: 90%;
+        }
+    }
+    
+    /* Touch-friendly optimizations */
+    .btn, .form-control, select {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* États de focus améliorés pour mobile */
+    .form-control:focus, select:focus {
+        outline: none;
+        border-color: #198754;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
+    }
+    
+    /* Styles pour les erreurs de validation */
+    .text-danger small {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+    
+    /* Animation subtile pour le bouton */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+    
+    .btn-success:active {
+        animation: pulse 0.3s ease;
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .card {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+        
+        .card-header {
+            background-color: #0f5132 !important;
+        }
+        
+        .form-label {
+            color: #e2e8f0;
+        }
+        
+        .form-control, select {
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+        
+        .form-control:focus, select:focus {
+            background-color: #4a5568;
+            border-color: #198754;
+            color: #e2e8f0;
+        }
+        
+        .input-group-text {
+            background-color: #718096;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+        
+        .btn-light {
+            background-color: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+        
+        .btn-light:hover {
+            background-color: #5a6578;
+            color: #e2e8f0;
+        }
+        
+        .text-muted {
+            color: #a0aec0 !important;
+        }
+        
+        .text-danger {
+            color: #feb2b2 !important;
+        }
+    }
+    
+    /* Amélioration des sélecteurs sur mobile */
+    @media (max-width: 576px) {
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+        
+        /* Pour iOS spécifiquement */
+        @supports (-webkit-touch-callout: none) {
+            select {
+                font-size: 16px !important;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+        }
+    }
+</style>
+
+<script>
+    // Script pour améliorer l'expérience mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 576;
+        
+        if (isMobile || isSmallScreen) {
+            // Optimisation pour mobile
+            document.body.classList.add('mobile-device');
+            
+            // Amélioration des interactions tactiles
+            const interactiveElements = document.querySelectorAll('.btn, .form-control, select');
+            interactiveElements.forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.9';
+                    if (this.classList.contains('btn')) {
+                        this.style.transform = 'scale(0.98)';
+                    }
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                    this.style.transform = 'scale(1)';
+                });
+                
+                element.addEventListener('touchcancel', function() {
+                    this.style.opacity = '1';
+                    this.style.transform = 'scale(1)';
+                });
+                
+                // Prévenir le double-tap zoom
+                element.addEventListener('touchstart', function(e) {
+                    if (e.touches.length > 1) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+            
+            // Focus management pour les formulaires mobiles
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    // Scroll doucement vers l'input
+                    setTimeout(() => {
+                        this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                });
+            });
+            
+            // Validation en temps réel sur mobile
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Validation basique côté client
+                    const quantiteInput = form.querySelector('input[name="quantite"]');
+                    if (quantiteInput && parseFloat(quantiteInput.value) <= 0) {
+                        e.preventDefault();
+                        alert('Veuillez entrer une quantité valide (supérieure à 0).');
+                        quantiteInput.focus();
+                        return false;
+                    }
+                    
+                    // Confirmation sur mobile
+                    if (isMobile) {
+                        if (!confirm('Confirmez-vous l\'enregistrement de cette récolte ?')) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    }
+                });
+            }
+            
+            // Date picker optimization for mobile
+            const dateInput = document.querySelector('input[type="date"]');
+            if (dateInput) {
+                // Set default value to today if empty
+                if (!dateInput.value) {
+                    const today = new Date().toISOString().split('T')[0];
+                    dateInput.value = today;
+                }
+                
+                // Mobile-specific date picker improvements
+                dateInput.addEventListener('focus', function() {
+                    // On mobile, show a hint about the date format
+                    if (isMobile) {
+                        this.setAttribute('placeholder', 'JJ/MM/AAAA');
+                    }
+                });
+            }
+            
+            // Désactiver certaines animations sur mobile pour la performance
+            const animatedElements = document.querySelectorAll('.btn-success, .btn-light');
+            animatedElements.forEach(element => {
+                element.style.transition = 'none';
+            });
+        }
+        
+        // Auto-focus sur le premier champ si vide
+        const firstInput = document.querySelector('input, select');
+        if (firstInput && !firstInput.value && !isMobile) {
+            setTimeout(() => {
+                firstInput.focus();
+            }, 300);
+        }
+        
+        // Gestion du redimensionnement
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 576) {
+                document.body.classList.add('mobile-view-active');
+            } else {
+                document.body.classList.remove('mobile-view-active');
+            }
+        });
+        
+        // Initialiser l'état mobile
+        if (window.innerWidth <= 576) {
+            document.body.classList.add('mobile-view-active');
+        }
+        
+        // Formatage automatique des nombres
+        const quantiteInput = document.querySelector('input[name="quantite"]');
+        if (quantiteInput) {
+            quantiteInput.addEventListener('blur', function() {
+                if (this.value) {
+                    const value = parseFloat(this.value);
+                    if (!isNaN(value)) {
+                        this.value = Math.round(value * 100) / 100; // 2 décimales max
+                    }
+                }
+            });
+        }
+    });
+    
+    // Prévenir le zoom sur iOS
+    document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
+    // Désactiver le zoom sur les inputs numériques iOS
+    document.addEventListener('DOMContentLoaded', function() {
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.fontSize = '16px';
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}
