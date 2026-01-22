@@ -7,10 +7,10 @@ class InscriptionProducteurForm(forms.ModelForm):
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(label="Prénom", widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(label="Nom", widget=forms.TextInput(attrs={'class': 'form-control'}))
-
+    email = forms.EmailField(label="Adresse e-mail", widget=forms.EmailInput(attrs={'class': 'form-control'}))
     class Meta:
         model = Producteur
-        fields = ['telephone', 'zone', 'parcelles_info']
+        fields = ['telephone', 'zone', 'parcelles_info', 'email']
         widgets = {
             'telephone': forms.TextInput(attrs={'class': 'form-control'}),
             'zone': forms.Select(attrs={'class': 'form-control'}),

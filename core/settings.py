@@ -28,6 +28,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'ta-cle-secrete-actuelle')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['*'] # On restreindra cela une fois le lien Render obtenu
 
+EMAIL_SUBJECT_PREFIX = '[AgriTech Bénin] '
+
 # Application definition
 
 INSTALLED_APPS = [
